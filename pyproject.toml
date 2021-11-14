@@ -1,0 +1,23 @@
+[tools.piter]
+env_root = "my_envs"
+dependencies = [
+    "click >=7.1.1, <9.0.0"
+]
+
+[tools.piter.env.dev]
+dependencies = [
+    "black >=19.10b0, <20.0b0",
+    "pytest >=4.4.0,<5.4.0" 
+]
+scripts.lint = "black piter"
+
+[tools.piter.env.test]
+dependencies = [
+    "pytest >=4.4.0,<5.4.0"   
+]
+scripts.test = "pytest"
+
+
+[tools.piter.scripts]
+test = "pytest"
+
