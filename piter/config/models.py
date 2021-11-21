@@ -1,4 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import Dict, List
 
 import toml
 
@@ -16,8 +17,8 @@ class EnvConfig:
     with_pip: bool = DEFAULT_CONFIG_ENV["with_pip"]
     prompt: str = DEFAULT_CONFIG_ENV["prompt"]
     upgrade_deps: bool = DEFAULT_CONFIG_ENV["upgrade_deps"]
-    dependencies: list[str] = DEFAULT_CONFIG_ENV["dependencies"]
-    scripts: dict[str, list[str]] = DEFAULT_CONFIG_ENV["scripts"]
+    dependencies: List[str] = DEFAULT_CONFIG_ENV["dependencies"]
+    scripts: Dict[str, List[str]] = DEFAULT_CONFIG_ENV["scripts"]
 
 
 @dataclass
@@ -33,7 +34,7 @@ class Config:
 
         self.env_root: str = self.setting_from_config_or_default("env_root")
 
-        self.env: dict[str, EnvConfig] = {}
+        self.env: Dict[str, EnvConfig] = {}
 
         if isinstance(self._config_from_file["env"], dict):
             for env_name, env_config in self._config_from_file["env"].items():
@@ -69,7 +70,7 @@ class Config:
         }
         return toml.dumps(output)
 
-    def get_warnings(self) -> list[EnvWarning]:
+    def get_warnings(self) -> List[EnvWarning]:
         result = []
 
         for env_name, env in self.env.items():

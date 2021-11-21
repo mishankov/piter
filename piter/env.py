@@ -1,6 +1,7 @@
 import venv
 import os
 import subprocess
+from typing import List
 
 from piter.config import config
 import piter.env
@@ -14,7 +15,7 @@ def env_lockfile_by_name(name: str):
     return os.path.join(config.env_root, name, "dependencies.lock")
 
 
-def env_execs(name: str) -> list[str]:
+def env_execs(name: str) -> List[str]:
     return [
         file
         for file in os.listdir(os.path.join(piter.env.env_path_by_name(name), "bin"))
@@ -33,7 +34,7 @@ def generate_lockfile(name: str):
     lock_file.close()
 
 
-def install_dependencies(name: str, dependencies: list[str] = None):
+def install_dependencies(name: str, dependencies: List[str] = None):
     if not dependencies:
         dependencies: list[str] = []
 

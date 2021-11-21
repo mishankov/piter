@@ -1,7 +1,9 @@
+from typing import List
+
 import toml
 
 
-def shrink_dependencies(dependencies: list[str]) -> list[str]:
+def shrink_dependencies(dependencies: List[str]) -> List[str]:
     return list(map(lambda a: a.replace(" ", ""), dependencies))
 
 

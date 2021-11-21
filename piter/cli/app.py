@@ -2,6 +2,7 @@ import shutil
 import os
 import sys
 import subprocess
+from typing import List
 
 import typer
 
@@ -103,7 +104,7 @@ def execute_script(
 
 @app.command("install")
 def install(
-    dependencies: list[str], environment: str = typer.Option("", "--environment", "-e")
+    dependencies: List[str], environment: str = typer.Option("", "--environment", "-e")
 ):
     dependencies = list(dependencies)
     piter.env.install_dependencies(environment, dependencies)
