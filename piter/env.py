@@ -65,6 +65,7 @@ def create_env(name: str):
         upgrade=config.env[name].upgrade,
         with_pip=config.env[name].with_pip,
         prompt=config.env[name].prompt,
-        upgrade_deps=config.env[name].upgrade_deps,
+        # TODO: weird error here https://github.com/mishankov/crazy-imports/runs/4278770282?check_suite_focus=true#step:5:156
+        # upgrade_deps=config.env[name].upgrade_deps,
     )
     new_venv.create(env_path_by_name(name))
