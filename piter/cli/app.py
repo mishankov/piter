@@ -99,3 +99,14 @@ def execute_script(
             exec_status = 1
 
     sys.exit(exec_status)
+
+
+@app.command("install")
+def install(
+    dependencies: list[str], environment: str = typer.Option("", "--environment", "-e")
+):
+    dependencies = list(dependencies)
+    piter.env.install_dependencies(environment, dependencies)
+    output.info(f"Dependencies installed", environment)
+    piter.env.generate_lockfile(environment)
+    output.info(f"Lockfile generated", environment)

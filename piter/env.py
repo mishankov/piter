@@ -33,16 +33,17 @@ def generate_lockfile(name: str):
     lock_file.close()
 
 
-def install_dependencies(name: str):
-    deps: list[str] = []
+def install_dependencies(name: str, dependencies: list[str] = None):
+    if not dependencies:
+        dependencies: list[str] = []
 
-    try:
-        lockfile = open(env_lockfile_by_name(name))
-        deps = lockfile.readlines()
-    except FileNotFoundError:
-        deps = config.env[name].dependencies
+        try:
+            lockfile = open(env_lockfile_by_name(name))
+            dependencies = lockfile.readlines()
+        except FileNotFoundError:
+            dependencies = config.env[name].dependencies
 
-    if deps and len(deps) > 0:
+    if dependencies and len(dependencies) > 0:
         subprocess.check_call(
             [
                 os.path.join(piter.env.env_path_by_name(name), "bin", "python"),
@@ -50,7 +51,7 @@ def install_dependencies(name: str):
                 "pip",
                 "install",
             ]
-            + deps
+            + dependencies
         )
 
 

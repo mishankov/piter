@@ -13,21 +13,15 @@ piter env dev -r
 piter env dev --reinstall
 piter env dev -ri
 
+# TODO: Permission denied: 'piter_envs/dev/venv/bin/activate'
 # activate env
 piter env dev --activate
 piter env dev -a
 
+# TODO: Permission denied: 'piter_envs/dev/venv/bin/activate'
 # deactivate env
 piter env --deactivate
 piter env -d
-
-# update dependency
-piter env dev --update dep_name
-piter env dev -u dep_name
-
-# update all dependencies
-piter env dev --update
-piter env dev -u
 
 # add dependency
 piter install dep_name
