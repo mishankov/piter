@@ -57,12 +57,12 @@ def install_dependencies(name: str):
 def create_env(name: str):
     # TODO: all params must be configurable
     new_venv = venv.EnvBuilder(
-        system_site_packages=False,
-        clear=False,
-        symlinks=True,
-        upgrade=False,
-        with_pip=True,
-        prompt=name,
-        upgrade_deps=False,
+        system_site_packages=config.env[name].system_site_packages,
+        clear=config.env[name].clear,
+        symlinks=config.env[name].symlinks,
+        upgrade=config.env[name].upgrade,
+        with_pip=config.env[name].with_pip,
+        prompt=config.env[name].prompt,
+        upgrade_deps=config.env[name].upgrade_deps,
     )
     new_venv.create(env_path_by_name(name))
