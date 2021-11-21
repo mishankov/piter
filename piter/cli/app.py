@@ -12,10 +12,12 @@ from piter.config import config
 
 app = typer.Typer()
 
-# TODO: analyze config for potential hiccups like pip install stuff
+
 @app.command("config")
 def print_config():
     typer.echo(f"{config.to_toml()}")
+    for warning in config.get_warnings():
+        output.warning(warning.line, warning.env, warning.script)
 
 
 @app.command()
@@ -44,16 +46,33 @@ def env(
         output.info(f"Lockfile generated", name)
 
 
-# TODO: try to determine env for run script on if no environment arg provided
 # TODO: if environment does not exists, create it and install dependencies
 # TODO: error like this (pytest was already installed and has executable): [piter][ci][ERROR] - Script line finished with error: piter_envs/ci/venv/bin/pip install piter_envs/ci/venv/bin/pytest pyyaml
 # TODO: error like this (pip was already installed): [piter][ci][ERROR] - Script line finished with error: piter_envs/ci/venv/bin/pip install --upgrade piter_envs/ci/venv/bin/pip
+# TODO: run scripts from file like "./install.sh" is not working
 @app.command("run")
 def execute_script(
     script: str, environment: str = typer.Option("", "--environment", "-e")
 ):
     exec_status = 0
-    
+
+    if not environment:
+        env_candidates: list[str] = []
+        for env_name, env in config.env.items():
+            if script in env.scripts.keys():
+                env_candidates.append(env_name)
+
+        if len(env_candidates) == 1:
+            environment = env_candidates[0]
+        elif len(env_candidates) == 0:
+            output.error(f"No environment has script {output.script(script)}")
+            return
+        else:
+            output.error(
+                f"Multiple environments {env_candidates} have script {output.script(script)}. Please specify environment with --environment (-e) option"
+            )
+            return
+
     for script_line in config.env[environment].scripts[script]:
         env_execs = piter.env.env_execs(environment)
         command = []
@@ -67,13 +86,15 @@ def execute_script(
         try:
             subprocess.check_call(command)
             output.success(
-                f"Script line executed successfully: {output.path(' '.join(command))}",
+                f"Script line executed successfully: {output.script(script_line)}",
                 environment,
+                script,
             )
         except subprocess.CalledProcessError:
             output.error(
-                f"Script line finished with error: {output.path(' '.join(command))}",
+                f"Script line finished with error: {output.script(script_line)}",
                 environment,
+                script,
             )
             exec_status = 1
 
