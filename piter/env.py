@@ -1,10 +1,10 @@
 import venv
 import os
 import subprocess
+import platform
 from typing import List
 
 from piter.config import config
-import piter.env
 
 
 def env_path_by_name(name: str):
@@ -14,20 +14,23 @@ def env_path_by_name(name: str):
 def env_lockfile_by_name(name: str):
     return os.path.join(config.env_root, name, "dependencies.lock")
 
+def env_execs_path(name: str):
+    return os.path.join(env_path_by_name(name), "Scripts" if platform.system() == "Windows" else "bin")
+
 
 def env_execs(name: str) -> List[str]:
     return [
         file
-        for file in os.listdir(os.path.join(piter.env.env_path_by_name(name), "bin"))
+        for file in os.listdir(env_execs_path(name))
         if os.path.isfile(
-            os.path.join(os.path.join(piter.env.env_path_by_name(name), "bin"), file)
+            os.path.join(env_execs_path(name), file)
         )
     ]
 
 
 def generate_lockfile(name: str):
     dependencies: bytes = subprocess.check_output(
-        [os.path.join(env_path_by_name(name), "bin", "python"), "-m", "pip", "freeze"]
+        [os.path.join(env_execs_path(name), "python"), "-m", "pip", "freeze"]
     )
     lock_file = open(env_lockfile_by_name(name), "w")
     lock_file.write(dependencies.decode("utf-8"))
@@ -47,7 +50,7 @@ def install_dependencies(name: str, dependencies: List[str] = None):
     if dependencies and len(dependencies) > 0:
         subprocess.check_call(
             [
-                os.path.join(piter.env.env_path_by_name(name), "bin", "python"),
+                os.path.join(env_execs_path(name), "python"),
                 "-m",
                 "pip",
                 "install",
