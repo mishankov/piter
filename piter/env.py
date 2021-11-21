@@ -14,17 +14,18 @@ def env_path_by_name(name: str):
 def env_lockfile_by_name(name: str):
     return os.path.join(config.env_root, name, "dependencies.lock")
 
+
 def env_execs_path(name: str):
-    return os.path.join(env_path_by_name(name), "Scripts" if platform.system() == "Windows" else "bin")
+    return os.path.join(
+        env_path_by_name(name), "Scripts" if platform.system() == "Windows" else "bin"
+    )
 
 
 def env_execs(name: str) -> List[str]:
     return [
         file
         for file in os.listdir(env_execs_path(name))
-        if os.path.isfile(
-            os.path.join(env_execs_path(name), file)
-        )
+        if os.path.isfile(os.path.join(env_execs_path(name), file))
     ]
 
 
@@ -49,12 +50,7 @@ def install_dependencies(name: str, dependencies: List[str] = None):
 
     if dependencies and len(dependencies) > 0:
         subprocess.check_call(
-            [
-                os.path.join(env_execs_path(name), "python"),
-                "-m",
-                "pip",
-                "install",
-            ]
+            [os.path.join(env_execs_path(name), "python"), "-m", "pip", "install",]
             + dependencies
         )
 

@@ -1,8 +1,39 @@
-```bash
-# new env
-piter env dev
-piter env test
+# PITER - virtual environments management tool for Python projects
 
+## Idea
+While working on Python project you may need multiple virtual environments. You can divide your development and test environments, have multiple environments to test against different version of libraries or ony other use cases
+
+## Minimal configuration
+
+Install `piter` with
+
+```bash
+pip install piter
+```
+
+Create or update `pyproject.toml` file with following configuration
+
+```toml
+[tools.piter]
+
+[tools.piter.env.test]
+dependencies = [
+	"pytest==6.2.4", 
+]
+scripts.test = "pytest"
+
+[tools.piter.env.dev]
+dependencies = [
+	"black==21.5b1",
+]
+
+scripts.lint = "black ."
+scripts.check = "black --check ."
+```
+
+Available commands with this configuration
+
+```bash
 # install, remove and reinstall env 
 piter env dev --install
 piter env dev -i
@@ -13,38 +44,11 @@ piter env dev -r
 piter env dev --reinstall
 piter env dev -ri
 
-# TODO: Permission denied: 'piter_envs/dev/venv/bin/activate'
-# activate env
-piter env dev --activate
-piter env dev -a
 
-# TODO: Permission denied: 'piter_envs/dev/venv/bin/activate'
-# deactivate env
-piter env --deactivate
-piter env -d
+# run script without specifying env
+piter run test
 
-# add dependency
-piter install dep_name
-
-#add dependencies for env
-piter install --environment test dep_name
-piter install -e test dep_name
-
-# update dependencies
-piter update dep_name
-piter update # all dependencies
-
-# update dependencies in env
-piter update --environment test dep_name
-piter update -e test dep_name # same as piter env dev -u dep_name
-piter update -e test # all dependencies. same as piter env test -u
-
-# run scripts in env
-piter run --environment test test
-piter run -e dev build
-
-# run global scripts
-piter run some_script
-piter run some_script --no-env # run script without activated environment
-
+# run script
+piter run lint --environment dev
+piter run check -e dev
 ```
