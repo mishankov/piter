@@ -15,7 +15,6 @@ scripts.lint = "black piter"
 dependencies = [
     "pytest==6.2.5"
 ]
-scripts.test = [
-    "pip install --editable .",
-    "pytest"
-]
+
+scripts.install = "pip install --editable ."
+scripts.test = "pytest"
