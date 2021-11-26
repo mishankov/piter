@@ -43,9 +43,9 @@ def env(
         output.info(f"Environment created", name)
 
     if install or reinstall:
-        environment.install_dependencies(name)
+        environment.install_dependencies()
         output.info(f"Dependencies installed", name)
-        environment.generate_lockfile(name)
+        environment.generate_lockfile()
         output.info(f"Lockfile generated", name)
 
 
@@ -115,7 +115,7 @@ def install(
     environment = ENVIRONMENTS[environment_name]
     dependencies = list(dependencies)
     
-    environment.install_dependencies(environment_name, dependencies)
+    environment.install_dependencies(dependencies)
     output.info(f"Dependencies installed", environment_name)
-    environment.generate_lockfile(environment_name)
+    environment.generate_lockfile()
     output.info(f"Lockfile generated", environment_name)
