@@ -6,7 +6,7 @@ from typing import List
 
 import typer
 
-import piter.env
+from piter.env import ENVIRONMENTS
 from piter.cli.utils import check_path_is_dir
 import piter.cli.output as output
 from piter.config import config
@@ -28,22 +28,24 @@ def env(
     remove: bool = typer.Option(False, "--remove", "-r"),
     reinstall: bool = typer.Option(False, "--reinstall", "-ri"),
 ):
+    environment = ENVIRONMENTS[name]
+    
     if remove or reinstall:
         try:
-            shutil.rmtree(piter.env.env_path_by_name(name))
+            shutil.rmtree(environment.path)
         except FileNotFoundError:
             output.info(f"Environment not found", name)
         else:
             output.info(f"Environment removed", name)
 
-    if install or not check_path_is_dir(piter.env.env_path_by_name(name)):
-        piter.env.create_env(name)
+    if install or not check_path_is_dir(environment.path):
+        environment.create()
         output.info(f"Environment created", name)
 
     if install or reinstall:
-        piter.env.install_dependencies(name)
+        environment.install_dependencies(name)
         output.info(f"Dependencies installed", name)
-        piter.env.generate_lockfile(name)
+        environment.generate_lockfile(name)
         output.info(f"Lockfile generated", name)
 
 
@@ -53,18 +55,19 @@ def env(
 # TODO: run scripts from file like "./install.sh" is not working
 @app.command("run")
 def execute_script(
-    script: str, environment: str = typer.Option("", "--environment", "-e")
+    script: str, environment_name: str = typer.Option("", "--environment", "-e")
 ):
     exec_status = 0
+    environment = ENVIRONMENTS[environment_name]
 
-    if not environment:
+    if not environment_name:
         env_candidates: list[str] = []
         for env_name, env in config.env.items():
             if script in env.scripts.keys():
                 env_candidates.append(env_name)
 
         if len(env_candidates) == 1:
-            environment = env_candidates[0]
+            environment_name = env_candidates[0]
         elif len(env_candidates) == 0:
             output.error(f"No environment has script {output.script(script)}")
             return
@@ -74,16 +77,16 @@ def execute_script(
             )
             return
 
-    for script_line in config.env[environment].scripts[script]:
-        env_execs = piter.env.env_execs(environment)
+    for script_line in config.env[environment_name].scripts[script]:
+        env_execs = environment.executives
         command = []
         
         if script_line.startswith("python -m"):
-            command = script_line.replace("python -m", f"{os.path.join(piter.env.env_execs_path(environment), 'python')} -m").split(" ")
+            command = script_line.replace("python -m", f"{os.path.join(environment.executives_path, 'python')} -m").split(" ")
         else:
             for command_part in script_line.split(" "):
                 if command_part in env_execs:
-                    command_part = os.path.join(piter.env.env_execs_path(environment), command_part)
+                    command_part = os.path.join(environment.executives_path, command_part)
                 
                 command.append(command_part)
 
@@ -91,13 +94,13 @@ def execute_script(
             subprocess.check_call(command)
             output.success(
                 f"Script line executed successfully: {output.script(script_line)}",
-                environment,
+                environment_name,
                 script,
             )
         except subprocess.CalledProcessError:
             output.error(
                 f"Script line finished with error: {output.script(script_line)}",
-                environment,
+                environment_name,
                 script,
             )
             exec_status = 1
@@ -107,10 +110,12 @@ def execute_script(
 
 @app.command("install")
 def install(
-    dependencies: List[str], environment: str = typer.Option("", "--environment", "-e")
+    dependencies: List[str], environment_name: str = typer.Option("", "--environment", "-e")
 ):
+    environment = ENVIRONMENTS[environment_name]
     dependencies = list(dependencies)
-    piter.env.install_dependencies(environment, dependencies)
-    output.info(f"Dependencies installed", environment)
-    piter.env.generate_lockfile(environment)
-    output.info(f"Lockfile generated", environment)
+    
+    environment.install_dependencies(environment_name, dependencies)
+    output.info(f"Dependencies installed", environment_name)
+    environment.generate_lockfile(environment_name)
+    output.info(f"Lockfile generated", environment_name)
