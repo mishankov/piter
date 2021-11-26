@@ -7,18 +7,15 @@ dependencies = [
 
 [tools.piter.env.dev]
 dependencies = [
-    "black >=19.10b0, <20.0b0",
-    "pytest >=4.4.0,<5.4.0" 
+    "black==19.10b0"
 ]
 scripts.lint = "black piter"
 
 [tools.piter.env.test]
 dependencies = [
-    "pytest >=4.4.0,<5.4.0"   
+    "pytest==6.2.5"
 ]
-scripts.test = "pytest"
-
-
-[tools.piter.scripts]
-test = "pytest"
-
+scripts.test = [
+    "pip install --editable .",
+    "pytest"
+]

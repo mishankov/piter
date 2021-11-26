@@ -19,6 +19,7 @@ class EnvConfig:
     upgrade_deps: bool = DEFAULT_CONFIG_ENV["upgrade_deps"]
     dependencies: List[str] = DEFAULT_CONFIG_ENV["dependencies"]
     scripts: Dict[str, List[str]] = DEFAULT_CONFIG_ENV["scripts"]
+    # install_self: bool = DEFAULT_CONFIG_ENV["install_self"]
 
 
 @dataclass
@@ -34,26 +35,28 @@ class Config:
 
         self.env_root: str = self.setting_from_config_or_default("env_root")
 
-        self.env: Dict[str, EnvConfig] = {}
+        self.env: Dict[str, EnvConfig] = None
 
-        if isinstance(self._config_from_file["env"], dict):
-            for env_name, env_config in self._config_from_file["env"].items():
-                if "prompt" not in env_config.keys():
-                    env_config["prompt"] = env_name
+        if "env" in self._config_from_file.keys():
+            self.env: Dict[str, EnvConfig] = {}
+            if isinstance(self._config_from_file["env"], dict):
+                for env_name, env_config in self._config_from_file["env"].items():
+                    if "prompt" not in env_config.keys():
+                        env_config["prompt"] = env_name
 
-                self.env[env_name] = EnvConfig(**env_config)
-                if (
-                    self.env[env_name].dependencies
-                    and len(self.env[env_name].dependencies) > 0
-                ):
-                    self.env[env_name].dependencies = shrink_dependencies(
+                    self.env[env_name] = EnvConfig(**env_config)
+                    if (
                         self.env[env_name].dependencies
-                    )
+                        and len(self.env[env_name].dependencies) > 0
+                    ):
+                        self.env[env_name].dependencies = shrink_dependencies(
+                            self.env[env_name].dependencies
+                        )
 
-                if isinstance(self.env[env_name].scripts, dict):
-                    for script_name, script in self.env[env_name].scripts.items():
-                        if isinstance(script, str):
-                            self.env[env_name].scripts[script_name] = [script]
+                    if isinstance(self.env[env_name].scripts, dict):
+                        for script_name, script in self.env[env_name].scripts.items():
+                            if isinstance(script, str):
+                                self.env[env_name].scripts[script_name] = [script]
 
     def to_toml(self) -> str:
         output = {
@@ -109,4 +112,4 @@ class Config:
         try:
             return shrink_dependencies(self._config_from_file["dependencies"])
         except:
-            return []
+            return None
