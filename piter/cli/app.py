@@ -29,7 +29,7 @@ def env(
     reinstall: bool = typer.Option(False, "--reinstall", "-ri"),
 ):
     environment = ENVIRONMENTS[name]
-    
+
     if remove or reinstall:
         try:
             shutil.rmtree(environment.path)
@@ -58,7 +58,6 @@ def execute_script(
     script: str, environment_name: str = typer.Option("", "--environment", "-e")
 ):
     exec_status = 0
-    environment = ENVIRONMENTS[environment_name]
 
     if not environment_name:
         env_candidates: list[str] = []
@@ -77,17 +76,23 @@ def execute_script(
             )
             return
 
+    environment = ENVIRONMENTS[environment_name]
+
     for script_line in config.env[environment_name].scripts[script]:
         env_execs = environment.executives
         command = []
-        
+
         if script_line.startswith("python -m"):
-            command = script_line.replace("python -m", f"{os.path.join(environment.executives_path, 'python')} -m").split(" ")
+            command = script_line.replace(
+                "python -m", f"{os.path.join(environment.executives_path, 'python')} -m"
+            ).split(" ")
         else:
             for command_part in script_line.split(" "):
                 if command_part in env_execs:
-                    command_part = os.path.join(environment.executives_path, command_part)
-                
+                    command_part = os.path.join(
+                        environment.executives_path, command_part
+                    )
+
                 command.append(command_part)
 
         try:
@@ -110,11 +115,12 @@ def execute_script(
 
 @app.command("install")
 def install(
-    dependencies: List[str], environment_name: str = typer.Option("", "--environment", "-e")
+    dependencies: List[str],
+    environment_name: str = typer.Option("", "--environment", "-e"),
 ):
     environment = ENVIRONMENTS[environment_name]
     dependencies = list(dependencies)
-    
+
     environment.install_dependencies(dependencies)
     output.info(f"Dependencies installed", environment_name)
     environment.generate_lockfile()
