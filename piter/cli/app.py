@@ -83,7 +83,7 @@ def execute_script(
         else:
             for command_part in script_line.split(" "):
                 if command_part in env_execs:
-                    command_part = piter.env.env_execs_path(command_part)
+                    command_part = os.path.join(piter.env.env_execs_path(environment), command_part)
                 
                 command.append(command_part)
 
