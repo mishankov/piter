@@ -79,7 +79,7 @@ def execute_script(
         command = []
         
         if script_line.startswith("python -m"):
-            command = script_line.replace("python -m", f"{piter.env.env_execs_path('python')} -m").split(" ")
+            command = script_line.replace("python -m", f"{os.path.join(piter.env.env_execs_path(environment), 'python')} -m").split(" ")
         else:
             for command_part in script_line.split(" "):
                 if command_part in env_execs:
