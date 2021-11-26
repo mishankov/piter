@@ -27,4 +27,4 @@ jobs:
         piter env ci -i
     - name: Test with pytest
       run: |
-        piter run test
+        piter run test -e ci
