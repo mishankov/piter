@@ -77,12 +77,15 @@ def execute_script(
     for script_line in config.env[environment].scripts[script]:
         env_execs = piter.env.env_execs(environment)
         command = []
-        for command_part in script_line.split(" "):
-            if command_part in env_execs:
-                command_part = os.path.join(
-                    piter.env.env_path_by_name(environment), "bin", command_part
-                )
-            command.append(command_part)
+        
+        if script_line.startswith("python -m"):
+            command = script_line.replace("python -m", f"{piter.env.env_execs_path('python')} -m").split(" ")
+        else:
+            for command_part in script_line.split(" "):
+                if command_part in env_execs:
+                    command_part = piter.env.env_execs_path(command_part)
+                
+                command.append(command_part)
 
         try:
             subprocess.check_call(command)
