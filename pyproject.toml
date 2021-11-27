@@ -13,7 +13,7 @@ scripts.lint = "black piter"
 
 [tools.piter.env.test]
 dependencies = [
-    "pytest==6.2.5"
+    "pytest==6.2.5",
 ]
 
 scripts.install = "pip install --editable ."
@@ -21,10 +21,12 @@ scripts.test = "pytest"
 
 [tools.piter.env.ci]
 dependencies = [
-    "pytest==6.2.5"
+    "pytest==6.2.5",
+    "coverage==6.2"
 ]
 
 scripts.test = [
     "pip install --editable .",
-    "pytest"
+    "coverage run pytest",
+    "coverage xml"
 ]
