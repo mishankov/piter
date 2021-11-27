@@ -86,6 +86,10 @@ def execute_script(
             command = script_line.replace(
                 "python -m", f"{os.path.join(environment.executives_path, 'python')} -m"
             ).split(" ")
+        elif script_line.startswith("coverage run"):
+            command = script_line.replace(
+                "coverage run", f"{os.path.join(environment.executives_path, 'coverage')} run"
+            ).split(" ")
         else:
             for command_part in script_line.split(" "):
                 if command_part in env_execs:
