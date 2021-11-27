@@ -32,4 +32,4 @@ jobs:
         piter run test -e ci
     
     - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v2
