@@ -1,5 +1,7 @@
 # PITER - virtual environments management tool for Python projects
 
+[![codecov](https://codecov.io/gh/mishankov/piter/branch/main/graph/badge.svg?token=13EL00ZJO9)](https://codecov.io/gh/mishankov/piter)
+
 ## Idea
 While working on Python project you may need multiple virtual environments. You can divide your development and test environments, have multiple environments to test against different version of libraries or ony other use cases
 
