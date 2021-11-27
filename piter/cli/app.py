@@ -99,6 +99,11 @@ def execute_script(
 
                 command.append(command_part)
 
+        output.info(
+            f"Command to execute {output.script(command)}",
+            environment_name,
+            script,
+        )
         try:
             subprocess.check_call(command)
             output.success(
