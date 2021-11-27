@@ -14,19 +14,26 @@ scripts.lint = "black piter"
 [tools.piter.env.test]
 dependencies = [
     "pytest==6.2.5",
+    "coverage[toml]==6.2"
 ]
 
 scripts.install = "pip install --editable ."
-scripts.test = "pytest"
+scripts.test = [
+    "coverage run -m pytest",
+    "coverage report"
+]
 
 [tools.piter.env.ci]
 dependencies = [
     "pytest==6.2.5",
-    "coverage==6.2"
+    "coverage[toml]==6.2"
 ]
 
 scripts.test = [
     "pip install --editable .",
-    "coverage run --source=piter -m pytest",
+    "coverage run -m pytest",
     "coverage xml"
 ]
+
+[tool.coverage.run]
+source = ["piter"]

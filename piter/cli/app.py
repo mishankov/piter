@@ -38,7 +38,7 @@ def env(
         else:
             output.info(f"Environment removed", name)
 
-    if install or not check_path_is_dir(environment.path):
+    if install:
         environment.create()
         output.info(f"Environment created", name)
 
