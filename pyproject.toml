@@ -27,6 +27,6 @@ dependencies = [
 
 scripts.test = [
     "pip install --editable .",
-    "coverage run pytest --source=piter",
+    "coverage run --source=piter -m pytest",
     "coverage xml"
 ]
