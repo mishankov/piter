@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='piter',
-    version='0.1.1',
+    version='0.1.2',
     author="Denis Mishankov",
     author_email="mishankov@mail.com",
     packages=find_packages(),
