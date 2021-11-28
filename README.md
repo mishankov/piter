@@ -1,5 +1,6 @@
 # PITER - virtual environments management tool for Python projects
 
+[![PyPI](https://img.shields.io/pypi/v/piter)](https://pypi.org/project/piter/)
 [![codecov](https://codecov.io/gh/mishankov/piter/branch/main/graph/badge.svg?token=13EL00ZJO9)](https://codecov.io/gh/mishankov/piter)
 
 ## Idea
