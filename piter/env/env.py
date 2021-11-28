@@ -41,6 +41,12 @@ class Env:
         lock_file.write(dependencies.decode("utf-8"))
         lock_file.close()
 
+    def remove_lockfile(self):
+        try:
+            os.remove(self.lockfile_path)
+        except FileNotFoundError:
+            pass
+
     def install_dependencies(self, dependencies: List[str] = None):
         if not dependencies:
             dependencies: list[str] = []
