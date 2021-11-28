@@ -26,6 +26,7 @@ def env(
     name: str,
     install: bool = typer.Option(False, "--install", "-i"),
     remove: bool = typer.Option(False, "--remove", "-r"),
+    remove_lockfile: bool = typer.Option(False, "--remove-lockfile", "-rl"),
     reinstall: bool = typer.Option(False, "--reinstall", "-ri"),
 ):
     environment = ENVIRONMENTS[name]
@@ -38,11 +39,13 @@ def env(
         else:
             output.info(f"Environment removed", name)
 
-    if install:
-        environment.create()
-        output.info(f"Environment created", name)
+    if remove_lockfile:
+        environment.remove_lockfile()
+        output.info(f"Lockfile removed", name)
 
     if install or reinstall:
+        environment.create()
+        output.info(f"Environment created", name)
         environment.install_dependencies()
         output.info(f"Dependencies installed", name)
         environment.generate_lockfile()
@@ -88,7 +91,8 @@ def execute_script(
             ).split(" ")
         elif script_line.startswith("coverage run"):
             command = script_line.replace(
-                "coverage run", f"{os.path.join(environment.executives_path, 'coverage')} run"
+                "coverage run",
+                f"{os.path.join(environment.executives_path, 'coverage')} run",
             ).split(" ")
         else:
             for command_part in script_line.split(" "):
@@ -100,9 +104,7 @@ def execute_script(
                 command.append(command_part)
 
         output.info(
-            f"Command to execute {output.script(command)}",
-            environment_name,
-            script,
+            f"Command to execute {output.script(command)}", environment_name, script,
         )
         try:
             subprocess.check_call(command)
