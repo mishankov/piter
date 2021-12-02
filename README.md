@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/piter)](https://pypi.org/project/piter/)
 [![codecov](https://codecov.io/gh/mishankov/piter/branch/main/graph/badge.svg?token=13EL00ZJO9)](https://codecov.io/gh/mishankov/piter)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/mishankov/piter.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mishankov/piter/alerts/)
 
 ## Idea
 While working on Python project you may need multiple virtual environments. You can divide your development and test environments, have multiple environments to test against different version of libraries or ony other use cases
