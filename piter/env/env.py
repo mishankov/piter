@@ -17,7 +17,7 @@ class Env:
 
     @property
     def lockfile_path(self):
-        return os.path.join(config.env_root, self.name, "dependencies.lock")
+        return os.path.join(config.env_root, self.name, "requirements.txt")
 
     @property
     def executives_path(self):
