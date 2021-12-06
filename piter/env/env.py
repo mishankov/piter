@@ -56,6 +56,8 @@ class Env:
                 dependencies = lockfile.readlines()
             except FileNotFoundError:
                 dependencies = config.env[self.name].dependencies
+                if config.dependencies:
+                    dependencies.extend(config.dependencies)
 
         if dependencies and len(dependencies) > 0:
             subprocess.check_call(

@@ -33,6 +33,7 @@ class Config:
         self._config_from_file = config_dict
 
         self.env_root: str = self.setting_from_config_or_default("env_root")
+        self.dependencies: str = self.setting_from_config_or_default("dependencies")
 
         self.env: Dict[str, EnvConfig] = None
 
@@ -105,10 +106,3 @@ class Config:
             return self._config_from_file[setting_name]
         except:
             return DEFAULT_CONFIG_PITER[setting_name]
-
-    @property
-    def dependencies(self) -> list:
-        try:
-            return shrink_dependencies(self._config_from_file["dependencies"])
-        except:
-            return None
