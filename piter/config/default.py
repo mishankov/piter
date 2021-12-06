@@ -10,4 +10,5 @@ DEFAULT_CONFIG_ENV = {
     "upgrade_deps": False,
     "dependencies": None,
     "scripts": None,
+    "vars": None
 }

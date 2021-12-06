@@ -34,6 +34,7 @@ class Config:
 
         self.env_root: str = self.setting_from_config_or_default("env_root")
         self.dependencies: str = self.setting_from_config_or_default("dependencies")
+        self.vars: Dict[str, str] = self.setting_from_config_or_default("vars")
 
         self.env: Dict[str, EnvConfig] = None
 

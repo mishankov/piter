@@ -23,6 +23,9 @@ scripts.test = [
     "coverage report"
 ]
 
+vars.TEST_ENV_VAR = "TEST_VALUE"
+vars.TEST_ENV_VAR_2 = "TEST_VALUE_2"
+
 [tools.piter.env.ci]
 dependencies = [
     "pytest==6.2.5",
