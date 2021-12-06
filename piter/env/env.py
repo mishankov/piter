@@ -71,7 +71,5 @@ class Env:
             upgrade=config.env[self.name].upgrade,
             with_pip=config.env[self.name].with_pip,
             prompt=config.env[self.name].prompt,
-            # TODO: weird error here https://github.com/mishankov/crazy-imports/runs/4278770282?check_suite_focus=true#step:5:156
-            # upgrade_deps=config.env[self.name].upgrade_deps,
         )
         new_venv.create(self.path)

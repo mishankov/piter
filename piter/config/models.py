@@ -19,7 +19,6 @@ class EnvConfig:
     upgrade_deps: bool = DEFAULT_CONFIG_ENV["upgrade_deps"]
     dependencies: List[str] = DEFAULT_CONFIG_ENV["dependencies"]
     scripts: Dict[str, List[str]] = DEFAULT_CONFIG_ENV["scripts"]
-    # install_self: bool = DEFAULT_CONFIG_ENV["install_self"]
 
 
 @dataclass
