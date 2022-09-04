@@ -1,4 +1,4 @@
-DEFAULT_CONFIG_PITER = {"env_root": "piter_envs", "dependencies": None, "env": None}
+DEFAULT_CONFIG_PITER = {"env_root": "pienvs", "dependencies": None, "env": None}
 
 DEFAULT_CONFIG_ENV = {
     "system_site_packages": False,
