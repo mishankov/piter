@@ -18,15 +18,15 @@ pip install piter
 Create or update `pyproject.toml` file with following configuration
 
 ```toml
-[tools.piter]
+[tool.piter]
 
-[tools.piter.env.test]
+[tool.piter.env.test]
 dependencies = [
 	"pytest==6.2.4", 
 ]
 scripts.test = "pytest"
 
-[tools.piter.env.dev]
+[tool.piter.env.dev]
 dependencies = [
 	"black==21.5b1",
 ]
