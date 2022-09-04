@@ -1,6 +1,7 @@
-venv/
 *.egg-info
 __pycache__
 dist
 .pytest_cache
 .coverage
+coverage.xml
+build/

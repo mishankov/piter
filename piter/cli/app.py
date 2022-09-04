@@ -50,6 +50,8 @@ def env(
         output.info(f"Dependencies installed", name)
         environment.generate_lockfile()
         output.info(f"Lockfile generated", name)
+        environment.generate_gitignore()
+        output.info(f".gitignore generated", name)
 
 
 # TODO: if environment does not exists, create it and install dependencies

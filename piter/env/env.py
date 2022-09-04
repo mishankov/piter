@@ -20,6 +20,10 @@ class Env:
         return os.path.join(config.env_root, self.name, "requirements.txt")
 
     @property
+    def gitignore_path(self):
+        return os.path.join(config.env_root, self.name, ".gitignore")
+
+    @property
     def executives_path(self):
         return os.path.join(
             self.path, "Scripts" if platform.system() == "Windows" else "bin"
@@ -40,6 +44,11 @@ class Env:
         lock_file = open(self.lockfile_path, "w")
         lock_file.write(dependencies.decode("utf-8"))
         lock_file.close()
+
+    def generate_gitignore(self):
+        gitignore_file = open(self.gitignore_path, "w")
+        gitignore_file.write("venv/\n")
+        gitignore_file.close()
 
     def remove_lockfile(self):
         try:
