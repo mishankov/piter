@@ -9,7 +9,7 @@ def shrink_dependencies(dependencies: List[str]) -> List[str]:
 
 def load_config():
     result = toml.load("pyproject.toml")
-    result = result["tools"]
+    result = result["tool"]
     result = result["piter"]
     # return toml.load("pyproject.toml")["tools"]["piter"]
     return result
