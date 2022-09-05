@@ -55,14 +55,20 @@ def env(
 
 
 # TODO: if environment does not exists, create it and install dependencies
-# TODO: error like this (pytest was already installed and has executable): [piter][ci][ERROR] - Script line finished with error: piter_envs/ci/venv/bin/pip install piter_envs/ci/venv/bin/pytest pyyaml
-# TODO: error like this (pip was already installed): [piter][ci][ERROR] - Script line finished with error: piter_envs/ci/venv/bin/pip install --upgrade piter_envs/ci/venv/bin/pip
 # TODO: run scripts from file like "./install.sh" is not working
 @app.command("run")
 def execute_script(
-    script: str, environment_name: str = typer.Option("", "--environment", "-e")
+    env_and_script: str
 ):
     exec_status = 0
+
+    environment_name = None
+    script = None
+    if ':' in env_and_script:
+        environment_name = env_and_script.split(':')[0]
+        script = env_and_script.split(':')[1]
+    else:
+        script = env_and_script
 
     if not environment_name:
         env_candidates: list[str] = []
@@ -77,7 +83,7 @@ def execute_script(
             return
         else:
             output.error(
-                f"Multiple environments {env_candidates} have script {output.script(script)}. Please specify environment with --environment (-e) option"
+                f"Multiple environments {env_candidates} have script {output.script(script)}. Please specify environment like this: piter run {env_candidates[0]}:{script}"
             )
             return
 
@@ -87,23 +93,15 @@ def execute_script(
         env_execs = environment.executives
         command = []
 
-        if script_line.startswith("python -m"):
-            command = script_line.replace(
-                "python -m", f"{os.path.join(environment.executives_path, 'python')} -m"
-            ).split(" ")
-        elif script_line.startswith("coverage run"):
-            command = script_line.replace(
-                "coverage run",
-                f"{os.path.join(environment.executives_path, 'coverage')} run",
-            ).split(" ")
-        else:
-            for command_part in script_line.split(" "):
-                if command_part in env_execs:
-                    command_part = os.path.join(
-                        environment.executives_path, command_part
-                    )
+        first_command_part = script_line.split(" ")[0]
+        if first_command_part in env_execs:
+            first_command_part = os.path.join(
+                environment.executives_path, first_command_part
+            )
 
-                command.append(command_part)
+            command.append(first_command_part)
+
+        command.extend(script_line.split(" ")[1:])
 
         output.info(
             f"Command to execute {output.script(command)}", environment_name, script,
