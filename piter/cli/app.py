@@ -58,9 +58,17 @@ def env(
 # TODO: run scripts from file like "./install.sh" is not working
 @app.command("run")
 def execute_script(
-    script: str, environment_name: str = typer.Option("", "--environment", "-e")
+    env_and_script: str
 ):
     exec_status = 0
+
+    environment_name = None
+    script = None
+    if ':' in env_and_script:
+        environment_name = env_and_script.split(':')[0]
+        script = env_and_script.split(':')[1]
+    else:
+        script = env_and_script
 
     if not environment_name:
         env_candidates: list[str] = []
@@ -75,7 +83,7 @@ def execute_script(
             return
         else:
             output.error(
-                f"Multiple environments {env_candidates} have script {output.script(script)}. Please specify environment with --environment (-e) option"
+                f"Multiple environments {env_candidates} have script {output.script(script)}. Please specify environment like this: piter run {env_candidates[0]}:{script}"
             )
             return
 

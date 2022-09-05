@@ -53,8 +53,5 @@ piter env dev -ri
 piter run test
 
 # run script
-piter run lint --environment dev
-piter run check -e dev
-
 piter run dev:lint
 ```
