@@ -55,8 +55,6 @@ def env(
 
 
 # TODO: if environment does not exists, create it and install dependencies
-# TODO: error like this (pytest was already installed and has executable): [piter][ci][ERROR] - Script line finished with error: piter_envs/ci/venv/bin/pip install piter_envs/ci/venv/bin/pytest pyyaml
-# TODO: error like this (pip was already installed): [piter][ci][ERROR] - Script line finished with error: piter_envs/ci/venv/bin/pip install --upgrade piter_envs/ci/venv/bin/pip
 # TODO: run scripts from file like "./install.sh" is not working
 @app.command("run")
 def execute_script(
