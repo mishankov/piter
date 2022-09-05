@@ -81,16 +81,6 @@ class Config:
             for script_name, script_lines in env.scripts.items():
                 for script_line in script_lines:
                     # TODO: add link to documentation
-                    if "pip install" in script_line or "pip3 install" in script_line:
-                        result.append(
-                            EnvWarning(
-                                env=env_name,
-                                script=script_name,
-                                line=f"Script has line with {output.script('pip install')} in it. It may cause issues: https://docs.link/scripts_caveats. Consider using {output.script('piter install')} instead",
-                            )
-                        )
-
-                    # TODO: add link to documentation
                     if ".sh" in script_line:
                         result.append(
                             EnvWarning(
