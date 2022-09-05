@@ -5,7 +5,7 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/mishankov/piter.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mishankov/piter/alerts/)
 
 ## Idea
-While working on Python project you may need multiple virtual environments. You can divide your development and test environments, have multiple environments to test against different version of libraries or ony other use cases
+While working on Python project you may need multiple virtual environments. You can divide your development and test environments, have multiple environments to test against different version of libraries or any other use cases
 
 ## Minimal configuration
 
