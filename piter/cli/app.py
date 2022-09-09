@@ -99,7 +99,7 @@ def execute_script(
                 environment.executives_path, first_command_part
             )
 
-            command.append(first_command_part)
+        command.append(first_command_part)
 
         command.extend(script_line.split(" ")[1:])
 
